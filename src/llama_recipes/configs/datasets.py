@@ -32,3 +32,12 @@ class custom_dataset:
     file: str = "examples/custom_dataset.py"
     train_split: str = "train"
     test_split: str = "validation"
+
+
+@dataclass
+class pororo_dataset:
+    dataset: str = "pororo_dataset"
+    train_split: str = "train"
+    test_split: str = "val"
+    data_path: str = "/ssd/tunhsiang/directorLLM/pororo/pororo_png"
+    video_len: int = 4
