@@ -4,4 +4,5 @@ python -m llama_recipes.finetuning \
     --model_name meta-llama/Llama-2-7b-hf \
     --quantization \
     --output_dir outputs \
-    --dataset pororo_dataset
+    --dataset pororo_dataset \
+    --save_metrics

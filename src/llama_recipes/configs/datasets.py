@@ -39,5 +39,5 @@ class pororo_dataset:
     dataset: str = "pororo_dataset"
     train_split: str = "train"
     test_split: str = "val"
-    data_path: str = "/ssd/tunhsiang/directorLLM/pororo/pororo_png"
+    data_path: str = "/work/u1509343/storydalle/data/pororo_png"
     video_len: int = 4

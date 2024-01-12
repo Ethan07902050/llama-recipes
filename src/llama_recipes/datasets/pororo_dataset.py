@@ -37,8 +37,7 @@ class InstructionDataset(Dataset):
         self.tokenizer = tokenizer
 
     def __len__(self):
-        return 16
-        # return len(self.ids)
+        return len(self.ids)
 
     def __getitem__(self, index):
         IGNORE_INDEX = -100  # The default setting in CrossEntropyLoss
