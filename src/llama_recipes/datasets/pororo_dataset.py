@@ -12,7 +12,7 @@ import torch
 from torch.utils.data import Dataset
 
 instruction = (
-    'The paragraph below describes a series of frames in a cartoon. Provide concise descriptions of the background layout for each frame. Focus solely on objects in the background.\n\n'
+    'The paragraph below describes a series of frames in a cartoon. Provide concise and coherent descriptions of the background layout for each frame. Focus solely on objects in the background.\n\n'
     'Input:\n{caption}\n\nResponse:\n'
 )
 
@@ -23,20 +23,21 @@ class InstructionDataset(Dataset):
         id_path = data_path / 'train_seen_unseen_ids.npy'
         following_path = data_path  / 'following_cache4.npy'
         description_path = data_path / 'descriptions.npy'
+        self.data_path = dataset_config.data_path
         
         # original pororo captions
         self.video_len = dataset_config.video_len
         train_ids, val_ids, test_ids = np.load(id_path, allow_pickle=True)
         self.ids = train_ids if partition == 'train' else val_ids
         self.followings = np.load(following_path)
-        self.descriptions_original = np.load(description_path)
+        self.descriptions_original = np.load(description_path, allow_pickle=True, encoding='latin1').item()
         
         # llava generated background
         self.background = json.load(open(background_path))
         self.tokenizer = tokenizer
 
     def __len__(self):
-        return 8
+        return 16
         # return len(self.ids)
 
     def __getitem__(self, index):
@@ -45,16 +46,14 @@ class InstructionDataset(Dataset):
         # load pororo captions
         src_img_id = self.ids[index]
         tgt_img_paths = [str(self.followings[src_img_id][i])[2:-1] for i in range(self.video_len)]
-        tgt_img_ids = [str(tgt_img_path).replace(self.img_folder, '').replace('.png', '') for tgt_img_path in tgt_img_paths]
-        captions = [self.descriptions_original[tgt_img_id][0] for tgt_img_id in tgt_img_ids]
+        tgt_img_ids = [str(tgt_img_path).replace(self.data_path, '').replace('.png', '') for tgt_img_path in tgt_img_paths]
+        captions = [self.descriptions_original[tgt_img_id][0].strip() for tgt_img_id in tgt_img_ids]
 
         # load llava generated prompts
         background_prompts = self.background[str(src_img_id)]
 
         prompt = instruction.format(caption='\n'.join(captions))
         example = prompt + '\n'.join(background_prompts)
-        print('prompt:', prompt)
-        print('example:', example)
         prompt = torch.tensor(
             self.tokenizer.encode(prompt), dtype=torch.int64
         )
@@ -69,7 +68,6 @@ class InstructionDataset(Dataset):
         label_mask = labels.ge(0)
         example[~example_mask] = 0
         labels[~label_mask] = IGNORE_INDEX
-        print('labels:', labels)
 
         return {
             "input_ids": example.tolist(),
