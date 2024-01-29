@@ -41,3 +41,11 @@ class pororo_dataset:
     test_split: str = "val"
     data_path: str = "/work/u1509343/storydalle/data/pororo_png"
     video_len: int = 4
+
+
+@dataclass
+class vwp_dataset:
+    dataset: str = "vwp_dataset"
+    train_split: str = "train"
+    test_split: str = "val"
+    data_path: str = "/work/u1509343/vwp"

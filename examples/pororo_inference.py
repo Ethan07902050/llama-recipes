@@ -22,6 +22,9 @@ from accelerate.utils import is_xpu_available
 
 instruction = (
     'The paragraph below describes a series of frames in a cartoon. Provide concise and coherent descriptions of the background layout for each frame. Focus solely on objects in the background.\n\n'
+    'Input:\nLoopy thinks Loopy is not good at exercising.\nPoby suggests Loopy to dance. Eddy Crong Pororo and Loopy are surprised.\nEddy Crong Pororo and Loopy are looking at Poby dancing.\nPoby is standing in front of his friends. Poby explains that Poby dances as and exercise.\n\n'
+    'Response:\n'
+    'The paragraph below describes a series of frames in a cartoon. Provide concise and coherent descriptions of the background layout for each frame. Focus solely on objects in the background.\n\n'
     'Input:\n{caption}\n\nResponse:\n'
 )
 
