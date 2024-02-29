@@ -12,7 +12,11 @@ import torch
 from torch.utils.data import Dataset
 
 instruction = (
-    'The paragraph below describes a series of frames in a film. Provide concise and coherent descriptions of the background layout for each frame. Focus solely on objects in the background.\n\n'
+    'The paragraph below describes a series of frames in a film.\n' 
+    'Provide concise and coherent descriptions of the background layout for each frame.\n' 
+    'Focus solely on objects in the background.\n' 
+    'Do not mention character names.\n' 
+    'Each input should correspond to a response.\n\n'
     'Input:\n{caption}\n\nResponse:\n'
 )
 
@@ -33,11 +37,15 @@ class InstructionDataset(Dataset):
         IGNORE_INDEX = -100  # The default setting in CrossEntropyLoss
 
         # load pororo captions
-        captions = self.metadata[index]['text']
+        captions = []
+        for i, caption in enumerate(self.metadata[index]['text']):
+            captions.append(f'{i+1}. {caption}')
 
         # load llava generated prompts
         _id = self.metadata[index]['assignment_id']
-        background_prompts = self.background[_id]
+        background_prompts = []
+        for i, prompt in enumerate(self.background[_id]):
+            background_prompts.append(f'{i+1}. {prompt}')
 
         prompt = instruction.format(caption='\n'.join(captions))
         example = prompt + '\n'.join(background_prompts)
