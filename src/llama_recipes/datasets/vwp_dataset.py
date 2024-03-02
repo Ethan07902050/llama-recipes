@@ -12,12 +12,16 @@ import torch
 from torch.utils.data import Dataset
 
 instruction = (
-    'The paragraph below describes a series of frames in a film.\n' 
-    'Provide concise and coherent descriptions of the background layout for each frame.\n' 
-    'Focus solely on objects in the background.\n' 
-    'Do not mention character names.\n' 
-    'Each input should correspond to a response.\n\n'
-    'Input:\n{caption}\n\nResponse:\n'
+    "<s>[INST] <<SYS>>"
+    "You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.  Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.\n\n"
+    "If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information."
+    "<</SYS>>"
+    "The paragraph below describes a series of frames in a film.\n" 
+    "Provide concise and coherent descriptions of the background layout for each frame.\n" 
+    "Focus solely on objects in the background.\n" 
+    "Do not mention character names.\n" 
+    "Each input should correspond to a response.\n\n"
+    "Input:\n{caption}\n\nResponse:\n [/INST]"
 )
 
 class InstructionDataset(Dataset):

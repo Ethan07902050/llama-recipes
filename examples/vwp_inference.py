@@ -119,8 +119,8 @@ def main(
             )
 
         output_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-        background = output_text[len(prompt):].strip('\n').split('\n')
-        examples[sample['assignment_id']] = background
+        # background = parse_output(output_text[len(prompt):])
+        examples[sample['assignment_id']] = output_text[len(prompt):]
 
     with open(out_path, 'w') as f:
         json.dump(examples, f, indent=2)
